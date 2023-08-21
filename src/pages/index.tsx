@@ -3,11 +3,9 @@ import Head from "next/head";
 import { api } from "~/utils/api";
 
 export default function Home() {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const user = useUser();
 
-  const { user } = useUser();
-
-  console.log(user);
+  const { data } = api.example.getAll.useQuery();
 
   return (
     <>
@@ -17,8 +15,13 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        {user ? <SignOutButton /> : <SignInButton />}
+        {user.isSignedIn ? <SignOutButton /> : <SignInButton />}
         <SignIn />
+        <div>
+          {data?.map((item) => (
+            <div key={item.id}>{item.content}</div>
+          ))}
+        </div>
       </main>
     </>
   );

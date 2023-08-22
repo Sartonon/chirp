@@ -101,13 +101,13 @@ const Feed = () => {
 };
 
 export default function Home() {
-  const user = useUser();
+  const { isLoaded: userLoaded, isSignedIn } = useUser();
 
-  const { data, isLoading } = api.posts.getAll.useQuery();
+  // Start fetching asap
+  api.posts.getAll.useQuery();
 
-  if (isLoading) return <div>Loading...</div>;
-
-  if (!data) return <div>Something went wrong</div>;
+  // Return empty div if user isn't loaded
+  if (!userLoaded) return <div />;
 
   return (
     <>
@@ -119,7 +119,7 @@ export default function Home() {
       <PageLayout>
         <div className="flex border-b border-slate-400 p-4">
           <CreatePostWizard />
-          {user.isSignedIn ? <SignOutButton /> : <SignInButton />}
+          {isSignedIn ? <SignOutButton /> : <SignInButton />}
         </div>
         <Feed />
         <div className="flex items-center justify-between p-4 text-xl">

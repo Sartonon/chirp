@@ -8,6 +8,11 @@ await import("./src/env.mjs");
 const config = {
   reactStrictMode: true,
 
+  // configure image hostame
+  images: {
+    domains: ["images.clerk.dev"],
+  },
+
   /**
    * If you are using `appDir` then you must comment the below `i18n` config out.
    *

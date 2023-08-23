@@ -4,6 +4,7 @@ import { api } from "~/utils/api";
 import { PageLayout } from "~/components/layout";
 import { PostView } from "~/components/postview";
 import { generateSSGHelper } from "~/server/helpers/ssgHelper";
+import { prisma } from "~/server/db";
 
 const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
   const { data } = api.posts.getById.useQuery({
@@ -41,8 +42,12 @@ export const getStaticProps: GetStaticProps = async (context) => {
   };
 };
 
-export const getStaticPaths = () => {
-  return { paths: [], fallback: "blocking" };
+export const getStaticPaths = async () => {
+  const data = await prisma.post.findMany();
+  return {
+    paths: data.map(({ id }) => ({ params: { id } })),
+    fallback: "blocking",
+  };
 };
 
 export default SinglePostPage;
